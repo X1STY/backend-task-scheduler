@@ -1,4 +1,4 @@
-# ** Simple backend for task-scheduler frontend application **
+# **Simple backend for task-scheduler frontend application**
 
 simple backend using express js
 
