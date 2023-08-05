@@ -6,11 +6,15 @@ class EventController {
         try {
             const access_token = req.headers.access_token
             if (!access_token) {
-                return res.status(400).json({ message: 'Не авторизован' })
+                return res.status(400).json({
+                    message: 'Не авторизован'
+                })
             }
             const { start_date, end_date } = req.query
             if (!start_date && !end_date) {
-                return res.status(404).json({ message: 'Invalid query parametrs' })
+                return res.status(404).json({
+                    message: 'Invalid query parametrs'
+                })
             }
             const events = await db.query(
                 'SELECT * FROM events WHERE date > $2 AND date < $3 AND owner_id = (SELECT user_id FROM "user" WHERE access_token = $1 ORDER BY "date" DESC)',
@@ -36,7 +40,9 @@ class EventController {
         try {
             const access_token = req.headers.access_token
             if (!access_token) {
-                return res.status(400).json({ message: 'Не авторизован' })
+                return res.status(400).json({
+                    message: 'Не авторизован'
+                })
             }
             const { date, time, description, event_group_id_bd } = req.body
             const defaultSectionId = await fetchSection(access_token, 'OWNER', 'No section')
@@ -69,7 +75,9 @@ class EventController {
         try {
             const access_token = req.headers.access_token
             if (!access_token) {
-                return res.status(400).json({ message: 'Не авторизован' })
+                return res.status(400).json({
+                    message: 'Не авторизован'
+                })
             }
             const eventId = req.params.id
             const eventGroup = await db.query(
@@ -86,7 +94,9 @@ class EventController {
         try {
             const access_token = req.headers.access_token
             if (!access_token) {
-                return res.status(400).json({ message: 'Не авторизован' })
+                return res.status(400).json({
+                    message: 'Не авторизован'
+                })
             }
             const { date, time, description } = req.body
             const eventId = req.params.id
@@ -98,7 +108,7 @@ class EventController {
                 'UPDATE "events" SET date=$1, time=$2, description=$3 WHERE event_id=$4 AND owner_id=(SELECT user_id FROM "user" WHERE access_token = $5) RETURNING *',
                 [date, time, description, eventId, access_token]
             )
-            
+
             res.json(updatedEvent.rows[0])
         } catch (error) {
             console.log(error)
@@ -124,7 +134,15 @@ export const createEventGroup = async (
     return createSection.rows[0]
 }
 
-export const addEventToDB = async (date, time, description, eventId, user_id, event_group_id, is_replayed) => {
+export const addEventToDB = async (
+    date,
+    time,
+    description,
+    eventId,
+    user_id,
+    event_group_id,
+    is_replayed
+) => {
     const event = await db.query(
         'INSERT INTO "events" (date, time, description, event_id, owner_id, event_group_id, is_replayed) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
         [date, time, description, eventId, user_id, event_group_id, is_replayed]

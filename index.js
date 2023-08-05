@@ -3,8 +3,8 @@ import cors from 'cors'
 import { userRouter } from './src/routes/user.route.js'
 import { eventRouter } from './src/routes/event.route.js'
 import { eventGroupRouter } from './src/routes/event-group.route.js'
+import { sectionRouter } from './src/routes/section-route.js'
 import 'dotenv/config'
-
 
 const PORT = process.env.BACKEND_PORT || 1111
 
@@ -18,6 +18,7 @@ app.use(json())
 app.use('/api', userRouter)
 app.use('/api', eventRouter)
 app.use('/api', eventGroupRouter)
+app.use('/api', sectionRouter)
 
 app.listen(PORT, () => {
     console.log(`server has been started on ${PORT} port...`)
